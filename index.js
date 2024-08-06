@@ -14,17 +14,26 @@ app.get('/', (req, res) => {
     res.send('Welcome to the Express server!');
 });
 
+
+// get data
+const getData = () => {
+    try {
+      const data = fs.readFileSync('db.json');
+      console.log(data)
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('Error reading or parsing db.json:', error);
+      throw error;
+    }
+};
+
 // CRUD routes
 app.get('/blogs', (req, res) => {
     try {
-        if (!fs.existsSync('db.json')) {
-          throw new Error('db.json file not found');
-        }
-        const data = fs.readFileSync('db.json');
-        return JSON.parse(data);
+        const data = getData();
+    res.json(data.blogs);
     } catch (error) {
-        console.error('Error reading or parsing db.json:', error.message);
-        return { blogs: [] }; 
+        res.status(500).send('Internal Server Error');
     }
 });
 

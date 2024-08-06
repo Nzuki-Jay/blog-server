@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors(
-    {origin: 'http://localhost:5173'}
+    {origin: '*'}
 ));
 
 // Root route
@@ -22,8 +22,13 @@ const getData = () => {
 
 // CRUD routes
 app.get('/blogs', (req, res) => {
-  const data = getData();
-  res.json(data.blogs);
+    try {
+        const data = fs.readFileSync('db.json');
+        return JSON.parse(data);
+    } catch (error) {
+        console.error('Error reading or parsing db.json:', error);
+        return { blogs: [] }; 
+    }
 });
 
 

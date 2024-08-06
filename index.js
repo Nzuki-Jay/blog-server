@@ -9,6 +9,11 @@ app.use(cors(
     {origin: 'http://localhost:5173'}
 ));
 
+// Root route
+app.get('/', (req, res) => {
+    res.send('Welcome to the Express server!');
+});
+
 // Read db.json
 const getData = () => {
   const data = fs.readFileSync('db.json');
